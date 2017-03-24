@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>efo</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body style="margin: 0">
+
+  <h1 style="text-align:center">Efo</h1>
+
+  <form id="form" name="form" action="/send.html">
+    <div class="form-group" data-efo-error-class="name" data-efo-set-default-height>
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name">
+      <div>
+        <span class="error" data-efo-error-class="name" data-efo-error-message="name"></span>
+      </div>
+    </div>
+    <div class="form-group" data-efo-error-class="email" data-efo-set-default-height>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email">
+      <div>
+        <span class="error" data-efo-error-class="email" data-efo-error-message="email"></span>
+      </div>
+    </div>
+    <div class="form-group" data-efo-error-class="address" data-efo-set-default-height>
+      <label for="address">Adress</label>
+      <div class="address-group">
+        <input type="text" id="address" name="address1" class="ad3" data-efo-name="address">
+        <span class="separator">-</span>
+        <input type="text" id="address" name="address2" class="ad4" data-efo-name="address">
+      </div>
+      <div>
+        <span class="error" data-efo-error-class="address" data-efo-error-message="address"></span>
+      </div>
+    </div>
+    <div class="form-group" data-efo-error-class="country" data-efo-set-default-height>
+      <label for="country">Country</label>
+      <input type="text" id="country" name="country">
+      <div>
+        <span class="error" data-efo-error-class="country" data-efo-error-message="country"></span>
+      </div>
+    </div>
+    <div class="form-group" data-efo-error-class="contents" data-efo-set-default-height>
+      <label for="contents">Contents</label>
+      <textarea placeholder="contents" id="contents" name="contents"></textarea>
+      <div>
+        <span class="error" data-efo-error-class="contents" data-efo-error-message="contents"></span>
+      </div>
+    </div>
+    <div class="form-group" data-efo-error-class="agreement" data-efo-set-default-height>
+      <label for="agreement">Agreement</label>
+      <input type="checkbox" id="agreement" name="agreement">
+      <div>
+        <span class="error" data-efo-error-class="agreement" data-efo-error-message="agreement"></span>
+      </div>
+    </div>
+    <input type="submit" id="submit-button">
+  </form>
+
+  <script src="/bundle.js"></script>
+</body>
+</html>

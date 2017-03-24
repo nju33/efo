@@ -1,0 +1,18 @@
+{
+  "name": "efo",
+  "description": "",
+  "main": "dist/efo.js",
+  "authors": [
+    "nju33 <nju33.ki@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/nju33/efo#readme",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "src",
+    "test"
+  ]
+}

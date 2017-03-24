@@ -1,0 +1,205 @@
+<div ref:container class="efo container">
+  <div ref:contents class="efo contents"></div>
+</div>
+
+<style scoped>
+.container {
+  position: relative;
+}
+</style>
+
+<script>
+  import MoveTo from 'moveto';
+  import throttle from 'lodash/throttle';
+  const moveTo = new MoveTo();
+
+  export default {
+    data() {
+      return {
+        targets: null,
+        tests: null,
+
+        leaveTransitionSec: 0,
+
+        __valid: null
+      }
+    },
+    methods: {
+      validate(opts = {}) {
+        const {contents} = this.refs;
+        const {targets, tests} = this.get();
+
+        if (targets === null || tests === null) {
+          return;
+        } else if (Object.keys(targets).length === 0) {
+          return true;
+        }
+
+        const result = Object.keys(targets).reduce((arr, name) => {
+          const validate = tests[name];
+          const els = targets[name];
+
+          if (typeof validate !== 'function') {
+            throw new Error('Required function to each value of `data.tests`');
+          }
+
+          const _result = validate.apply(null, els);
+          if (typeof _result[0] !== 'boolean') {
+            throw new Error(
+              'Boolean is required for the first return value of the function'
+            );
+          }
+
+          const handle = throttle((() => {
+            let tid = null;
+            const errorClassEls = Array.prototype.slice.call(
+              contents.querySelectorAll(
+                `[data-efo-error-class="${name}"]`
+              )
+            );
+
+            const errorMessageEls = Array.prototype.slice.call(
+              contents.querySelectorAll(
+                `[data-efo-error-message="${name}"]`
+              )
+            );
+
+            const errorADHEls = Array.prototype.slice.call(
+              contents.querySelectorAll('[data-efo-set-default-height]')
+            );
+
+            return () => {
+              const _result = validate.apply(null, els);
+
+              errorADHEls.forEach(el => {
+                if (!el.style.height) {
+                  el.style.height = el.clientHeight + 'px';
+                }
+              });
+
+              setTimeout(() => {
+                if (_result[0]) {
+                  errorClassEls.forEach(el => {
+                    el.classList.add('efo-resolved');
+                  });
+                  tid = setTimeout(() => {
+                    errorMessageEls.forEach(el => {
+                      el.innerText = ''
+                    });
+                    errorClassEls.forEach(el => {
+                      el.classList.remove('efo-error');
+                      el.classList.remove('efo-resolved');
+                    });
+                  }, this.get('leaveTransitionSec') || 0);
+                } else {
+                  if (tid !== null) {
+                    clearTimeout(tid);
+                    tid = null;
+                    errorClassEls.forEach(el => {
+                      el.classList.remove('efo-resolved');
+                    });
+                  }
+                  errorClassEls.forEach(el => {
+                    el.classList.add('efo-error');
+                    el.classList.add(name);
+                  });
+                  errorMessageEls.forEach(el => {
+                    el.innerText = _result[1];
+                  });
+                }
+              }, 10);
+            };
+          })(), 100);
+
+          els.forEach(el => {
+            const eventType = (type => {
+              if (/checkbox|radio/.test(type)) {
+                return 'change';
+              }
+              return 'keyup';
+            })(el.getAttribute('type'));
+
+            el.addEventListener(eventType, handle);
+          });
+
+          arr.push({
+            targets: els,
+            result: _result,
+            handle
+          });
+          return arr;
+        }, []);
+
+        if (opts.scroll) {
+          const errorItems = result.filter(item => !item.result[0])
+          if (errorItems.length > 0) {
+            const {top} = errorItems[0].targets[0].getBoundingClientRect();
+            const pos = top + window.pageYOffset;
+            moveTo.move(pos + (opts.scrollAdjust || -50), {
+              callback: () => {
+                errorItems[0].targets[0].focus();
+                errorItems.forEach(item => {
+                  item.handle();
+                });
+              }
+            });
+          }
+        }
+
+        return result.every(item => item.result[0]);
+      }
+    },
+    oncreate() {
+      init.call(this);
+    }
+  };
+
+  function init() {
+    if (this.get('tests') === null) {
+      throw new Error('Required object to `data.tests`');
+    }
+
+    (() => {
+      const {container, contents} = this.refs;
+      const parent = container.parentElement;
+      Array.prototype.slice.call(parent.children)
+        .filter(el => {
+          return !el.classList.contains('efo');
+        })
+        .forEach(el => {
+          contents.appendChild(el);
+        });
+
+      const targets = Array.prototype.slice.call(
+        contents.querySelectorAll('input,textarea')
+      ).filter(el => {
+        if (el.getAttribute('type') === 'submit') {
+          return false;
+        } else if (el.getAttribute('novalidate') !== null) {
+          return false;
+        }
+        return true;
+      }).reduce((result, el) => {
+        const name = el.getAttribute('data-efo-name') ||
+                     el.getAttribute('name');
+        console.log(name);
+        if (name === null) {
+          throw new Error('Required `data-efo-name` or `name` attr');
+        }
+
+        if (!result[name]) {
+          result[name] = [];
+        }
+
+        result[name].push(el);
+        return result;
+      }, {});
+
+      this.set({targets});
+
+      if (process.env.NODE_ENV === 'development') {
+        console.info('init end', this.get());
+      }
+    })();
+  }
+</script>

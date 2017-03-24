@@ -1,0 +1,110 @@
+@charset "utf-8";
+
+body {
+  min-height: 100vh;
+  background: #f8f8f8;
+  margin: 0;
+  font: 14px / 1.5 Quicksand, 游ゴシック体, "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+input,
+textarea {
+  box-sizing: border-box;
+  padding: .5em;
+  font-size: inherit;
+  outline: none;
+  transition: .2s;
+  border: 1px solid #aaa;
+  margin-bottom: .3em;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #cb1b45;
+}
+
+input[type=checkbox] {
+  margin-left: .5em;
+}
+
+input[type=submit] {
+  cursor: pointer;
+  border-radius: 3px;
+  background: #eee;
+}
+
+textarea {
+  height: 8em;
+  width: 100%;
+}
+
+label {
+  display: block;
+  margin-left: .5em;
+}
+
+#form {
+  margin: 5em auto;
+  width: 300px;
+}
+
+.form-group {
+  margin: .5em 0;
+  position: relative;
+  transition: .3s;
+}
+
+.form-group.name.efo-error,
+.form-group.email.efo-error,
+.form-group.address.efo-error,
+.form-group.country.efo-error {
+  height: 6.5em !important;
+}
+
+.form-group.contents.efo-error {
+  height: 12.2em !important;
+}
+
+.form-group.agreement.efo-error {
+  height: 5.2em !important;
+}
+
+.address-group {
+  display: flex;
+  align-items: center;
+}
+.ad3 {
+  width: 3.5em;
+}
+.ad4 {
+  width: 4.5em;
+}
+.separator {
+  margin: .5em;
+  font-size: 1.3em;
+  color: #aaa;
+}
+
+.error {
+  position: absolute;
+  bottom: .7em;
+  display: inline-block;
+  color: #fff;
+  border-radius: 3px;
+  box-sizing: border-box;
+  background: #CB1B45;
+  transition: opacity .3s;
+  opacity: 0;
+  padding: 0;
+  font-size: .8em;
+}
+
+.error.efo-error {
+  padding: .2em .5em;
+  opacity: 1;
+}
+
+.error.efo-resolved {
+  padding: .2em .5em;
+  opacity: 0;
+}
