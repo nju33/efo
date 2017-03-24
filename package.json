@@ -18,7 +18,8 @@
     "browser",
     "commonjs",
     "es",
-    "modal"
+    "form",
+    "error"
   ],
   "author": "nju33",
   "license": "MIT",
