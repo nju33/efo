@@ -256,6 +256,7 @@ function isObject$2(value) {
 
 var isObject_1 = isObject$2;
 
+/** Detect free variable `global` from Node.js. */
 var freeGlobal$1 = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
 
 var _freeGlobal = freeGlobal$1;
