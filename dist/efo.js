@@ -1077,9 +1077,7 @@ var template = (function () {
 
       this.set({targets});
 
-      {
-        console.info('init end', this.get());
-      }
+      
     })();
   }
 
